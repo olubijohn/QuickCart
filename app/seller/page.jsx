@@ -16,9 +16,11 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData()
     formData.append("name", name)
@@ -47,11 +49,10 @@ const AddProduct = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      toast.error(error.message)
-      
+      toast.error(error.message)   
     }
 
-
+    setLoading(false)
   };
 
   return (
@@ -161,8 +162,8 @@ const AddProduct = () => {
             />
           </div>
         </div>
-        <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
-          ADD
+        <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded" disabled={loading}>
+          {loading ? "Adding..." : "ADD"}
         </button>
       </form>
       {/* <Footer /> */}
