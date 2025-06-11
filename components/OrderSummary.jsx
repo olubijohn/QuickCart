@@ -3,7 +3,7 @@ import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
+ 
 const OrderSummary = () => {
 
   const { currency, router, getToken,user, cartItems, getCartCount, getCartAmount } = useAppContext()
@@ -15,10 +15,10 @@ const OrderSummary = () => {
   const fetchUserAddresses = async () => {
     try {
       const token = await getToken()
-      const {data} = axios.get("/api/user/address/get-address", {headers: {Authorization: `Bearer ${token}`}})
+      const { data } = await axios.get("/api/user/address/get-address", { headers: { Authorization: `Bearer ${token}` } })
       if (data.success) {
         setUserAddresses(data.addresses)
-        if(data.addresses.length > 0) {
+        if (data.addresses.length > 0) {
           setSelectedAddress(data.addresses[0])
         }
       } else {
@@ -38,6 +38,7 @@ const OrderSummary = () => {
       try {
         if (!selectedAddress) {
           toast.error("Please Select an Address")
+          return;
         }
         let cartItemArray = Object.keys(cartItems).map((key)=> {
           return {product:key, quantity:cartItems[key]}
@@ -46,9 +47,10 @@ const OrderSummary = () => {
 
         if (cartItemArray.length === 0) {
           toast.error("cart is empty")
+          return;
         }
         const token = await getToken()
-        const {data} = await axios.post("/api/order/create", {address: selectedAddress._id, itmes: cartItemArray}, {headers: {Authorization: `Bearer ${token}`}})
+        const {data} = await axios.post("/api/order/create", {address: selectedAddress._id, items: cartItemArray}, {headers: {Authorization: `Bearer ${token}`}})
         if (data.success) {
           toast.success(data.message);
           // Pass order/cart details as query params
