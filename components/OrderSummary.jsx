@@ -50,8 +50,16 @@ const OrderSummary = () => {
         const token = await getToken()
         const {data} = await axios.post("/api/order/create", {address: selectedAddress._id, itmes: cartItemArray}, {headers: {Authorization: `Bearer ${token}`}})
         if (data.success) {
-          toast.success(data.message)
-          router.push("/order-placed")
+          toast.success(data.message);
+          // Pass order/cart details as query params
+          router.push({
+            pathname: "/order-placed",
+            query: {
+              orderId: data.orderId, // if available
+              items: JSON.stringify(cartItemArray),
+              address: JSON.stringify(selectedAddress)
+            }
+          });
         } else {
           toast.error(data.message)
         }
