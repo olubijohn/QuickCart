@@ -8,14 +8,15 @@ export async function POST(request) {
     try {
         const {userId} = getAuth(request)
         const {address, items} = await request.json()
-        if(!address, items.length === 0) {
+        if (!address || !items || items.length === 0) {
             return NextResponse.json({success: false, message: "Invalid Data"})
         }
         // calculate amount
-        const amount = items.map(async (total, item)=> {
-            const product = Product.findById(item.product)
-            return await total + (product.offerPrice * item.quantity)
-        },0)
+        let amount = 0;
+        for (const item of items) {
+            const product = await Product.findById(item.product);
+            amount += product.offerPrice * item.quantity;
+        }
         await inngest.send({
             name: "order/created",
             data: {
@@ -29,12 +30,11 @@ export async function POST(request) {
         // clear user cart data
         const user = await User.findById(userId)
         user.cartItems = {}
-        user.save()
+        await user.save()
 
-        return NextResponse.josn({success: true, message: "Order Placed"})
+        return NextResponse.json({success: true, message: "Order Placed"})
     } catch (error) {
         console.log(error);
-        return NextResponse.josn({success: false, message: error.message})
-        
+        return NextResponse.json({success: false, message: error.message})
     }
 }
