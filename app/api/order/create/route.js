@@ -15,6 +15,9 @@ export async function POST(request) {
         let amount = 0;
         for (const item of items) {
             const product = await Product.findById(item.product);
+            if (!product) {
+                return NextResponse.json({success: false, message: `Product not found for ID: ${item.product}`});
+            }
             amount += product.offerPrice * item.quantity;
         }
         await inngest.send({
