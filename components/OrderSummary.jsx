@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
  
 const OrderSummary = () => {
 
-  const { currency, router, getToken,user, cartItems, getCartCount, getCartAmount } = useAppContext()
+  const { currency, router, getToken,user, cartItems, getCartCount, getCartAmount, products } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -50,7 +50,11 @@ const OrderSummary = () => {
           return;
         }
         const token = await getToken()
-        const {data} = await axios.post("/api/order/create", {address: selectedAddress._id, items: cartItemArray}, {headers: {Authorization: `Bearer ${token}`}})
+        const {data} = await axios.post("/api/order/create", {
+          address: selectedAddress._id,
+          items: cartItemArray,
+          products
+        }, {headers: {Authorization: `Bearer ${token}`}})
         if (data.success) {
           toast.success(data.message);
           // Pass order/cart details as query params
