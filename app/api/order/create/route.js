@@ -4,7 +4,6 @@ import Product from "@/models/Product";
 import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 
 export async function POST(request) {
     try {
@@ -17,16 +16,8 @@ export async function POST(request) {
         // calculate amount
         let amount = 0;
         for (const item of items) {
-            console.log("Looking for product:", item.product, typeof item.product);
-            let product;
-            try {
-                product = await Product.findById(new mongoose.Types.ObjectId(item.product));
-            } catch (e) {
-                // If the ID is not a valid ObjectId, skip or handle error
-                return NextResponse.json({success: false, message: `Invalid product ID: ${item.product}`});
-            }
+            const product = await Product.findOne({ _id: item.product });
             if (!product) {
-                console.log("NOT FOUND:", item.product);
                 return NextResponse.json({success: false, message: `Product not found for ID: ${item.product}`});
             }
             amount += product.offerPrice * item.quantity;
