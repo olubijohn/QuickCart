@@ -1,9 +1,9 @@
 import { inngest } from "@/config/inngest";
+import connectDB from "@/config/db";
 import Product from "@/models/Product";
 import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import connectDB from "@/config/db";
 
 export async function POST(request) {
     try {
@@ -16,8 +16,10 @@ export async function POST(request) {
         // calculate amount
         let amount = 0;
         for (const item of items) {
+            console.log("Looking for product:", item.product);
             const product = await Product.findById(item.product);
             if (!product) {
+                console.log("NOT FOUND:", item.product);
                 return NextResponse.json({success: false, message: `Product not found for ID: ${item.product}`});
             }
             amount += product.offerPrice * item.quantity;
