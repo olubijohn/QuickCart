@@ -2,10 +2,10 @@
 import { assets } from '@/assets/assets'
 import { useAppContext } from '@/context/AppContext'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-const OrderPlaced = () => {
+function OrderPlacedContent() {
   const { router, products } = useAppContext();
   const searchParams = useSearchParams();
 
@@ -47,4 +47,10 @@ const OrderPlaced = () => {
   )
 }
 
-export default OrderPlaced
+export default function OrderPlaced() {
+  return (
+    <Suspense>
+      <OrderPlacedContent />
+    </Suspense>
+  );
+}
