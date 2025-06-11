@@ -6,8 +6,8 @@ import { NextResponse } from "next/server";
 import connectDB from "@/config/db";
 
 export async function POST(request) {
-    await connectDB(); // Ensure DB connection!
     try {
+        await connectDB(); // Ensure DB connection!
         const {userId} = getAuth(request)
         const {address, items} = await request.json()
         if (!address || !items || items.length === 0) {
