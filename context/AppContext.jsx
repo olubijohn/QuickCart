@@ -26,7 +26,7 @@ export const AppContextProvider = (props) => {
 
     const fetchProductData = async () => {
         try {
-            const {data} = await axios.get("api/product/list")
+            const {data} = await axios.get("/api/product/list")
             if (data.success) {
                 setProducts(data.products)
             } else {
@@ -68,7 +68,7 @@ export const AppContextProvider = (props) => {
         if (user) {
             try {
                 const token = await getToken()
-                await axios.post("api/cart/update", {cartData}, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.post("/api/cart/update", {cartData}, {headers: {Authorization: `Bearer ${token}`}})
                 toast.success("Item added to cart")    
             } catch (error) {
                 toast.error(error.message)
@@ -88,7 +88,7 @@ export const AppContextProvider = (props) => {
         if (user) {
             try {
                 const token = await getToken()
-                await axios.post("api/cart/update", {cartData}, {headers: {Authorization: `Bearer ${token}`}})
+                await axios.post("/api/cart/update", {cartData}, {headers: {Authorization: `Bearer ${token}`}})
                 toast.success("Cart Updated")    
             } catch (error) {
                 toast.error(error.message)
