@@ -59,14 +59,13 @@ const OrderSummary = () => {
           toast.success(data.message);
           // Pass order/cart details as query params
           console.log("Order created successfully", data);
-          router.push({
-            pathname: "/order-placed",
-            query: {
-              orderId: data.orderId, // if available
-              items: JSON.stringify(cartItemArray),
-              address: JSON.stringify(selectedAddress)
-            }
-          });
+          const params = new URLSearchParams({
+            orderId: data.orderId,
+            items: JSON.stringify(cartItemArray),
+            address: JSON.stringify(selectedAddress)
+          }).toString();
+
+          router.push(`/order-placed?${params}`);
         } else {
           toast.error(data.message)
         }
