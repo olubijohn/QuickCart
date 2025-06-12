@@ -6,11 +6,11 @@ const orderSchema = new mongoose.Schema({
         product: {type: String, required: true, ref: "product"},
         quantity: {type: Number, required: true}
     }],
-    amount: {type: String, required: true},
-    address: {type: String, required: true},
-    status: {type: String,required: true, default: "Order Placed"},
+    amount: {type: Number, required: true},      // <-- should be Number
+    address: {type: Object, required: true},     // <-- should be Object
+    status: {type: String, required: true, default: "Order Placed"},
     date: {type: Number, required: true}
-})
+});
 
 const Order = mongoose.models.order || mongoose.model("order", orderSchema)
 
