@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
         quantity: {type: Number, required: true}
     }],
     amount: {type: Number, required: true},      // <-- should be Number
-    address: {type: Object, required: true},     // <-- should be Object
+    address: {type: mongoose.Schema.Types.ObjectId, required: true},     // <-- should be Object
     status: {type: String, required: true, default: "Order Placed"},
     date: {type: Number, required: true}
 });
