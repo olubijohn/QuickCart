@@ -40,7 +40,7 @@ const AddProduct = () => {
       if (data.success) {
         toast.success(data.message)
         setName("")
-        setCategory("Earphone")
+        setCategory("Men")
         setDescription("")
         setPrice("")
         setOfferPrice("")

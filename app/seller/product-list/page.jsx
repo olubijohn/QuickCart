@@ -30,6 +30,24 @@ const ProductList = () => {
     }
   }
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      const token = await getToken();
+      const res = await axios.delete(`/api/product/delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.data.success) {
+        setProducts(products.filter((p) => p._id !== id));
+        toast.success("Product deleted!");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     if (user){
       fetchSellerProduct();
@@ -71,14 +89,23 @@ const ProductList = () => {
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
                   <td className="px-4 py-3">${product.offerPrice}</td>
-                  <td className="px-4 py-3 max-sm:hidden">
-                    <button onClick={() => router.push(`/product/${product._id}`)} className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md">
+                  <td className="px-4 py-3 max-sm:hidden flex gap-2">
+                    <button
+                      onClick={() => router.push(`/product/${product._id}`)}
+                      className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md"
+                    >
                       <span className="hidden md:block">Visit</span>
                       <Image
                         className="h-3.5"
                         src={assets.redirect_icon}
                         alt="redirect_icon"
                       />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product._id)}
+                      className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-red-600 text-white rounded-md"
+                    >
+                      <span className="hidden md:block">Delete</span>
                     </button>
                   </td>
                 </tr>
