@@ -21,6 +21,10 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: "not authorized" });
     }
 
+    if (!userId) {
+      return NextResponse.json({ success: false, message: "userId is missing" });
+    }
+
     const formData = await request.formData();
 
     const name = formData.get("name");
