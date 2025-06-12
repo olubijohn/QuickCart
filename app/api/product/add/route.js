@@ -4,6 +4,7 @@ import Product from "@/models/Product";
 import { getAuth } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
+import { nanoid } from "nanoid"; // npm install nanoid
 
 // Cloudinary Configuration
 cloudinary.config({
@@ -51,15 +52,16 @@ export async function POST(request) {
 
     const images = (await results).map(result => result.secure_url)
 
-    await connectDB()
+    await connectDB();
     const newProduct = await Product.create({
+        _id: nanoid(), // generate a unique string id
         userId,
         name,
         category,
         description,
         price: Number(price),
         offerPrice: Number(offerPrice),
-        images,
+        image: images,
         date: Date.now()
     })
     return NextResponse.json({success: true, message: "Uploaded Successfully", newProduct})
